@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>My Contacts (Grushai Stepan)</title>
+        <link rel="stylesheet" type="text/css" href="phonebook.css">
+    </head>
+    <script src="angular.min.js"></script> 
+      <script>
+          var app=angular.module('app',[])
+            .controller('phonebookCtrl', function($scope) {
+                $scope.currentPersonId="-1";
+                $scope.phonebook = [
+                {name:'Grushai Stepan',
+                phone:'80976205037',
+                email:'stepan.sitime@gmail.com'}
+                ]
+                $scope.addNewPerson=function(){
+                if($scope.name!='') {
+                    $scope.phonebook.push({
+                        name: $scope.name,
+                        phone: $scope.phone,
+                        email: $scope.email
+                    });
+                }
+                $scope.name='';
+                $scope.phone='';
+                $scope.email='';
+                }
+                
+                $scope.savePerson=function(){
+                    if($scope.currentPersonId>-1){
+                        var id=$scope.currentPersonId;
+                        $scope.phonebook[id].name=$scope.name;
+                        $scope.phonebook[id].phone=$scope.phone;
+                        $scope.phonebook[id].email=$scope.email;
+                    $scope.name='';
+                    $scope.phone='';
+                    $scope.email='';
+                    $scope.currentPersonId=-1;
+                    }
+                }
+                
+                $scope.editPerson=function(id){
+                    $scope.currentPersonId=id;
+                        $scope.name=$scope.phonebook[id].name;
+                        $scope.phone=$scope.phonebook[id].phone;
+                        $scope.email=$scope.phonebook[id].email;
+                }
+                $scope.deletePerson=function(id){
+                        $scope.phonebook.splice(id,1);
+                }
+            })
+        </script>
+    <body id="bookapp" data-ng-app="app" ng-controller='phonebookCtrl'>
+        
+        <form>
+            <div>
+            <div>
+                <label>Name & Last Name</label>
+            </div>
+            <div>
+                <input type="text" ng-model='name'/>
+            </div>
+            
+            <div>
+                <label>Tel No</label>
+            </div>
+            <div>
+                <input type="text" ng-model='phone'/>
+            </div>
+            
+            <div>
+                <label>E-mail</label>
+            </div>
+            <div>
+                <input type="text" ng-model='email'/>
+            </div>
+            
+            <div>
+                <button ng-click="addNewPerson()" ng-hide="currentPersonId>-1">ADD</label>
+                <button ng-click="savePerson()" ng-show="currentPersonId>  -1">SAVE</label>
+            </div>
+            </div>
+        </form>
+        
+  
+<table id="phonelist" border=1 style="width:1000px">
+                <tr>
+                    <th>#</th>
+                    <th>Name & Last Name</th>
+                    <th>Tel No</th>
+                    <th>E-Mail</th>
+                    <th></th>
+                </tr>
+                <tr ng-repeat="person in phonebook">
+                    <td>{{$index+1}}</td>
+                    <td>{{person.name}}</td>
+                    <td>{{person.phone}}</td>
+                    <td>{{person.email}}</td>
+                    <td>
+                        <button class="tiny radius" ng-click="editPerson($index)">Edit</button>
+                        <button class="tiny radius alert" ng-click="deletePerson($index)">Delete</button>
+                    </td>
+                </tr>
+</table>
+    </body>
+</html>
